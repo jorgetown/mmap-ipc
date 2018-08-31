@@ -22,6 +22,8 @@ As per 'spec', Randomizer has the following responsibilities:
 + add positive integers to a queue implementation
 + read answers from a queue implementation
 
+Their functionality is unit tested separately from that of their dependencies.
+
 ### Prime
 As per 'spec', Prime has the following responsibilities:
 + read positive integers from a queue implementation
@@ -44,3 +46,7 @@ Stream.generate(intsQueue::poll)
     answersQueue.add(answer); // Queue implementation should change to accommodate multiple writers
 });
 ```
+
+
+Prime and Randomizer stop when they fill the backing file (~2GBs of data). Support for much larger quantities of data (TBs) can be done by linking chunks of ~MAX_INT bytes but was beyond the goal of this exercise.
+A day's worth of Randomizer/Prime would require ~200GBs with the current approach.
