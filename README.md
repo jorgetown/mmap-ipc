@@ -6,12 +6,9 @@ To build and run:
 
 ```
 mvn clean install
-```
-
-Followed by:
-```
-java Prime
-java Randomizer
+cd classes/
+java jdc.Prime
+java jdc.Randomizer
 ```
 
 
