@@ -19,7 +19,7 @@ public final class Answer {
     }
 
     public Answer(final int number, final int isPrime) {
-        this(number, isPrime == 1 ? true : false);
+        this(number, isPrime == 1);
     }
 
     @Override
