@@ -30,14 +30,12 @@ public class SingleQueueReaderTest {
         readBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, 28); // Capacity for 3 items + cursor
 
         queueWriter = new SingleQueueWriter<>(
-                "test_writer_queue_",
                 writeBuffer,
                 (buffer, answer) -> buffer.asIntBuffer().put(answer.number).put(answer.isPrime ? 1 : 0),
                 8
         );
 
         underTest = new SingleQueueReader<>(
-                "test_reader_queue_",
                 readBuffer,
                 (buffer) -> {
                     int number = buffer.getInt();

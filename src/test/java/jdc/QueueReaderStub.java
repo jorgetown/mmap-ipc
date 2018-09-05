@@ -2,7 +2,6 @@ package jdc;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -17,7 +16,7 @@ public final class QueueReaderStub<T> implements IpcQueueReader<T> {
     }
 
     public QueueReaderStub() {
-        this(new ArrayDeque<T>());
+        this(new ArrayDeque<>());
     }
 
     @Override
@@ -31,7 +30,7 @@ public final class QueueReaderStub<T> implements IpcQueueReader<T> {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         backingStore.clear();
     }
 }

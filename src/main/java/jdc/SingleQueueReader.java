@@ -16,24 +16,57 @@ import java.util.function.Function;
  */
 public final class SingleQueueReader<T> implements IpcQueueReader<T> {
     private static final int DEFAULT_MEMORY_MAP_SIZE = (int) Math.pow(2, 31) - 1;
-    private final MappedByteBuffer readBuffer;
+    private final ByteBuffer readBuffer;
     private final Function<ByteBuffer, T> unmarshaller;
-    private final String name;
     private final int bufferSize;
 
     private final long address;
 
-    public SingleQueueReader(@NotNull final String name,
-                             @NotNull final MappedByteBuffer readBuffer,
+    public SingleQueueReader(@NotNull final ByteBuffer readBuffer,
                              @NotNull final Function<ByteBuffer, T> unmarshaller,
                              final int bufferSize) {
 
-        this.name = name;
         this.readBuffer = readBuffer;
         this.unmarshaller = unmarshaller;
         this.readBuffer.getInt();
         this.bufferSize = bufferSize;
         this.address = ((DirectBuffer) readBuffer).address();
+    }
+
+    public static SingleQueueReader<Answer> answersReader() throws IOException {
+        int bufferSize = 8;
+        File file = new File(".", "answers_queue_.dat");
+
+        try (FileChannel fileChannel = new RandomAccessFile(file, "rw").getChannel()) {
+
+            ByteBuffer mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, DEFAULT_MEMORY_MAP_SIZE).asReadOnlyBuffer();
+
+            return new SingleQueueReader<>(
+                    mappedByteBuffer,
+                    (buffer) -> {
+                        int number = buffer.getInt();
+                        int isPrime = buffer.getInt();
+                        return new Answer(number, isPrime);
+                    },
+                    bufferSize
+            );
+        }
+    }
+
+    public static SingleQueueReader<Integer> intsReader() throws IOException {
+        int bufferSize = 8;
+        File file = new File("ints_queue_.dat");
+
+        try (FileChannel fileChannel = new RandomAccessFile(file, "rw").getChannel()) {
+
+            MappedByteBuffer mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, DEFAULT_MEMORY_MAP_SIZE);
+
+            return new SingleQueueReader<>(
+                    mappedByteBuffer,
+                    ByteBuffer::getInt,
+                    bufferSize
+            );
+        }
     }
 
     @Override
@@ -56,39 +89,7 @@ public final class SingleQueueReader<T> implements IpcQueueReader<T> {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         readBuffer.clear();
-    }
-
-    public static SingleQueueReader<Answer> answersReader(@NotNull final String name) throws IOException {
-        int bufferSize = 8;
-        File file = new File("answers_queue_.dat");
-        FileChannel fileChannel = new RandomAccessFile(file, "rw").getChannel();
-        MappedByteBuffer mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, DEFAULT_MEMORY_MAP_SIZE);
-
-        return new SingleQueueReader<>(
-                name,
-                mappedByteBuffer,
-                (buffer) -> {
-                    int number = buffer.getInt();
-                    int isPrime = buffer.getInt();
-                    return new Answer(number, isPrime);
-                },
-                bufferSize
-        );
-    }
-
-    public static SingleQueueReader<Integer> intsReader(@NotNull final String name) throws IOException {
-        int bufferSize = 8;
-        File file = new File("ints_queue_.dat");
-        FileChannel fileChannel = new RandomAccessFile(file, "rw").getChannel();
-        MappedByteBuffer mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, DEFAULT_MEMORY_MAP_SIZE);
-
-        return new SingleQueueReader<>(
-                name,
-                mappedByteBuffer,
-                ByteBuffer::getInt,
-                bufferSize
-        );
     }
 }

@@ -27,7 +27,6 @@ public class SingleQueueWriterTest {
         mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_WRITE, 0, 16); // Capacity for 3 items + cursor
 
         underTest = new SingleQueueWriter<>(
-                "tests_writer_queue_",
                 mappedByteBuffer,
                 (buffer, item) -> buffer.asIntBuffer().put(item),
                 4
