@@ -25,7 +25,7 @@ public class RandomizerTest {
         Iterator<Integer> ints = Arrays.asList(-1, 3).iterator();
 
         underTest = new Randomizer(
-                () -> ints.next(),
+                ints::next,
                 answer -> {
                 },
                 queueWriter,
@@ -37,10 +37,10 @@ public class RandomizerTest {
 
     @Test
     public void singleIntegerSuppliedSingleIntegerEnqueued() {
-        Iterator<Integer> ints = Arrays.asList(13).iterator();
+        Iterator<Integer> ints = Collections.singletonList(13).iterator();
 
         underTest = new Randomizer(
-                () -> ints.next(),
+                ints::next,
                 answer -> {
                 },
                 queueWriter,
@@ -58,7 +58,7 @@ public class RandomizerTest {
         Iterator<Integer> ints = Arrays.asList(13, 1, 8782).iterator();
 
         underTest = new Randomizer(
-                () -> ints.next(),
+                ints::next,
                 answer -> {
                 },
                 queueWriter,
@@ -81,8 +81,8 @@ public class RandomizerTest {
         List<Answer> expected = new ArrayList<>();
 
         underTest = new Randomizer(
-                () -> ints.next(),
-                answer -> expected.add(answer),
+                ints::next,
+                expected::add,
                 queueWriter,
                 queueReader
         );
@@ -102,8 +102,8 @@ public class RandomizerTest {
         queueReader = new QueueReaderStub<>(store);
 
         underTest = new Randomizer(
-                () -> ints.next(),
-                answer -> answers.add(answer),
+                ints::next,
+                answers::add,
                 queueWriter,
                 queueReader
         );
@@ -126,8 +126,8 @@ public class RandomizerTest {
         queueReader = new QueueReaderStub<>(store);
 
         underTest = new Randomizer(
-                () -> ints.next(),
-                answer -> answers.add(answer),
+                ints::next,
+                answers::add,
                 queueWriter,
                 queueReader
         );

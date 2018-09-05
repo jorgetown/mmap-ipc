@@ -30,28 +30,11 @@ public final class Randomizer {
         this.answersQueue = answersQueue;
     }
 
-    public void dequeueAnswer() {
-        Answer answer = answersQueue.poll();
-
-        if (answer != null) {
-            answersConsumer.accept(answer);
-        }
-    }
-
-    public void enqueueInt() {
-        int i = intsSupplier.get();
-        if (i < 1) {
-            throw new IllegalArgumentException("Must supply positive integers only");
-        }
-
-        intsQueue.add(i);
-    }
-
     public static void main(String[] args) throws IOException {
 
-        IpcQueueWriter<Integer> intsQueue = SingleQueueWriter.intsWriter("RandomizerIntsQueueWriter");
+        IpcQueueWriter<Integer> intsQueue = SingleQueueWriter.intsWriter();
 
-        IpcQueueReader<Answer> answersQueue = SingleQueueReader.answersReader("RandomizerAnswersQueueReader");
+        IpcQueueReader<Answer> answersQueue = SingleQueueReader.answersReader();
 
         Random random = new Random();
 
@@ -96,5 +79,22 @@ public final class Randomizer {
         });
 
         executorService.shutdown();
+    }
+
+    public void dequeueAnswer() {
+        Answer answer = answersQueue.poll();
+
+        if (answer != null) {
+            answersConsumer.accept(answer);
+        }
+    }
+
+    public void enqueueInt() {
+        int i = intsSupplier.get();
+        if (i < 1) {
+            throw new IllegalArgumentException("Must supply positive integers only");
+        }
+
+        intsQueue.add(i);
     }
 }

@@ -10,9 +10,9 @@ import java.util.concurrent.Executors;
 public final class Prime {
 
     public static void main(String[] args) throws IOException {
-        SingleQueueReader<Integer> intsQueue = SingleQueueReader.intsReader("PrimeIntsQueueReader");
+        SingleQueueReader<Integer> intsQueue = SingleQueueReader.intsReader();
 
-        SingleQueueWriter<Answer> answersQueue = SingleQueueWriter.answersWriter("PrimeAnswersQueueWriter");
+        SingleQueueWriter<Answer> answersQueue = SingleQueueWriter.answersWriter();
 
         Primality primality = new Primality();
 
