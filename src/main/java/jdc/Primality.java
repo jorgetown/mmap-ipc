@@ -1,16 +1,14 @@
 package jdc;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Function;
+import java.util.function.IntFunction;
 
 /**
  * @author Jorge De Castro
  */
-public final class Primality implements Function<Integer, Answer> {
+public final class Primality implements IntFunction<Answer> {
 
     @Override
-    public Answer apply(@NotNull final Integer i) {
+    public Answer apply(final int i) {
         return isPrime(i) ? new Answer(i, true) : new Answer(i, false);
     }
 

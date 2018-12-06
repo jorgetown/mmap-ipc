@@ -7,19 +7,19 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.IntSupplier;
 
 /**
  * @author Jorge De Castro
  */
 public final class Randomizer {
-    private final Supplier<Integer> intsSupplier;
+    private final IntSupplier intsSupplier;
     private final Consumer<Answer> answersConsumer;
     private final IpcQueueWriter<Integer> intsQueue;
     private final IpcQueueReader<Answer> answersQueue;
 
     public Randomizer(
-            @NotNull final Supplier<Integer> intsSupplier,
+            @NotNull final IntSupplier intsSupplier,
             @NotNull final Consumer<Answer> answersConsumer,
             @NotNull final IpcQueueWriter<Integer> intsQueue,
             @NotNull final IpcQueueReader<Answer> answersQueue) {
@@ -90,7 +90,7 @@ public final class Randomizer {
     }
 
     public void enqueueInt() {
-        int i = intsSupplier.get();
+        int i = intsSupplier.getAsInt();
         if (i < 1) {
             throw new IllegalArgumentException("Must supply positive integers only");
         }
