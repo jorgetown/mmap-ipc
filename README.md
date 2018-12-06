@@ -3,7 +3,7 @@ IPC programming exercise using memory mapped file(s).
 
 
 ### Spec
-Create two small applications: one called Randomizer, the other Prime.
+Create two small applications: one called Randomizer; the other, Prime.
 
 Randomizer‘s job is to generate a series of positive random integers and send those to Prime via a distributed queue of integers.
 
@@ -41,7 +41,7 @@ As per 'spec', Prime has the following responsibilities:
 + read positive integers from a queue
 + add primality-tested answers to a queue
 
-Like Randomizer, Prime's' responsibilities are unit tested separately from those of its dependencies.
+Like Randomizer, Prime's responsibilities are unit tested separately from those of its dependencies.
 
 Queue reader and writer are separate for illustration convenience and testability.
 
